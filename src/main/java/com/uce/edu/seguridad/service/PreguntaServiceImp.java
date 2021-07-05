@@ -27,8 +27,9 @@ public class PreguntaServiceImp implements PreguntaService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Pregunta> listarEntidad() {
-        return null;
+        return this.preguntaRepositry.findAll();
     }
 
     @Override

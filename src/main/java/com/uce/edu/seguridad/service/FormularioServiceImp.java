@@ -20,8 +20,9 @@ public class FormularioServiceImp implements FormularioService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Formulario consultarPorId(Long id) {
-        return null;
+        return this.formularioRepository.findById(id).orElse(null);
     }
 
     @Override

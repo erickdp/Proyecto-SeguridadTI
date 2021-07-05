@@ -24,10 +24,6 @@ public class Universidad implements Serializable {
     @Column(name = "nombre_universidad")
     private String nombreUniversidad;
 
-    @ManyToOne
-    @JoinColumn(name = "id_provincia")
-    private Provincia provincia;
-
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "id_universidad")
     private List<Coworker> coworkers;

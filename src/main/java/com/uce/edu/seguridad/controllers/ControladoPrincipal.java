@@ -1,10 +1,7 @@
 package com.uce.edu.seguridad.controllers;
 
 import com.uce.edu.seguridad.models.*;
-import com.uce.edu.seguridad.service.CoworkerService;
-import com.uce.edu.seguridad.service.FormularioService;
-import com.uce.edu.seguridad.service.PreguntaService;
-import com.uce.edu.seguridad.service.UsuarioService;
+import com.uce.edu.seguridad.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +23,11 @@ public class ControladoPrincipal {
     @Autowired
     private CoworkerService coworkerService;
 
+    @Autowired
+    private ProvinciaService provinciaService;
+
+    // Metodo para iniciar session, necesita el nombre del usuario y su pass
+    // Para sabe si es coworker u admin utilizar el atributo de Rol.tipoRol
     @GetMapping("/iniciarSession/{usuario}/{password}")
     public Usuario iniciarSession(
             @PathVariable(name = "usuario") String usuario,
@@ -34,11 +36,20 @@ public class ControladoPrincipal {
         return usuarioRepo;
     }
 
-    @GetMapping("/agregarPregunta/{formulario}/{pregunta}")
+    // Metodo que devuelve las preguntas y al tipo de formulario a donde pertenece
+    @GetMapping("/obtenerPreguntas")
+    public List<Pregunta> obtenerPreguntas() {
+        return this.preguntaService.listarEntidad();
+    }
+
+    // Metodo para agregar pregunta mediante el id del formulario y la pregunta en si
+    //    Para enviar una pregunta con espacios hacer %20
+//    el id del formulario es tipo numero y la pregunta es cadena
+    @GetMapping("/agregarPregunta/{idformulario}/{pregunta}")
     public Pregunta agregarPregunta(
-            @PathVariable(name = "formulario") String formulario,
+            @PathVariable(name = "idformulario") Long idformulario,
             @PathVariable(name = "pregunta") String pregunta) {
-        var formularioA = this.formularioService.buscarPorNombreFormulario(formulario);
+        var formularioA = this.formularioService.consultarPorId(idformulario);
         var preguntaA = new Pregunta();
         preguntaA.setPregunta(pregunta);
         preguntaA.setFormulario(formularioA);
@@ -46,15 +57,17 @@ public class ControladoPrincipal {
         return preguntaA;
     }
 
-    @PostMapping("/calificarPregunta/{pregunta}/{calificacion}")
+    // Con este metodo se permite agregar calificacion a la pregunta mediante el id de la pregunta y la calificacion en si
+    // idpregunta, calificacion enviar un entero (si se puede de tipo Long) y el coworker en json
+    @PostMapping("/calificarPregunta/{idpregunta}/{calificacion}")
     public Coworker calificarPregunta(
-            @RequestBody Coworker coworker,
-            @PathVariable(name = "pregunta") String pregunta,
+            @RequestBody Coworker coworker, // Se necesita enviar un JSON de tipo Coworker, basta con el parametro del mail
+            @PathVariable(name = "idpregunta") Long idPregunta,
             @PathVariable(name = "calificacion") Integer calificacion
     ) {
         var coworkerA = this.coworkerService.buscarPorMailInstitucional(coworker.getMailInstitucional());
         var preguntas = coworkerA.getPreguntas();
-        var preguntaA = this.preguntaService.consultarPorId(2L);
+        var preguntaA = this.preguntaService.consultarPorId(idPregunta);
 
         var coworkerPregunta = new CoworkerPregunta();
         coworkerPregunta.setPregunta(preguntaA);
@@ -65,6 +78,11 @@ public class ControladoPrincipal {
         this.coworkerService.guardar(coworkerA);
 
         return coworkerA;
+    }
+
+    @GetMapping("/obtenerUniversidades")
+    public List<Provincia> obtenerUniversidades() {
+        return this.provinciaService.listarEntidad();
     }
 
 }

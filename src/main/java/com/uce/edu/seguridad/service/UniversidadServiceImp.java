@@ -27,8 +27,9 @@ public class UniversidadServiceImp implements UniversidadService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Universidad> listarEntidad() {
-        return null;
+        return this.universidadRepository.findAll();
     }
 
     @Override

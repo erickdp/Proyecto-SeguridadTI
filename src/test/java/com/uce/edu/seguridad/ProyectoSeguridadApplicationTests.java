@@ -43,7 +43,7 @@ class ProyectoSeguridadApplicationTests {
         provinciaEsperada.setNombre("Quito");
         provinciaEsperada.setUnivesidades(Collections.singletonList(universidad));
 
-        universidad.setProvincia(provinciaEsperada);
+//        universidad.setProvincia(provinciaEsperada);
 
         this.provinciaService.guardar(provinciaEsperada);
         var provinciaReal = this.provinciaService.consultarPorId(2L);

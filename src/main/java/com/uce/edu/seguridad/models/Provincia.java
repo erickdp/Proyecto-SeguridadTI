@@ -23,6 +23,7 @@ public class Provincia implements Serializable {
 
     private String nombre;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "provincia", fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @JoinColumn(name = "id_universidad")
     private List<Universidad> univesidades;
 }
