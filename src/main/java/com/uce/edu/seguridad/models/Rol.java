@@ -23,7 +23,4 @@ public class Rol implements Serializable {
 
     @Column(name = "tipo_rol")
     private String tipoRol;
-
-    @OneToMany(mappedBy = "rol", cascade = CascadeType.MERGE)
-    private List<Usuario> usuarios;
 }

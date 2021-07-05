@@ -28,7 +28,8 @@ public class Universidad implements Serializable {
     @JoinColumn(name = "id_provincia")
     private Provincia provincia;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "universidad")
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name = "id_universidad")
     private List<Coworker> coworkers;
 
 }

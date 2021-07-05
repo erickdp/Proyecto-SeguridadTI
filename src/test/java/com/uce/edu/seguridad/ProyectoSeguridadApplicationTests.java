@@ -80,8 +80,8 @@ class ProyectoSeguridadApplicationTests {
         log.info(pregunta.getPregunta());
 
         var coworkerPregunta = new CoworkerPregunta();
-        coworkerPregunta.setCoworker(coworker);
-        coworkerPregunta.setPregunta(pregunta);
+//        coworkerPregunta.setCoworker(coworker);
+//        coworkerPregunta.setPregunta(pregunta);
         coworkerPregunta.setCalificacion(1);
         this.coworkerPreguntaService.guardar(coworkerPregunta);
 

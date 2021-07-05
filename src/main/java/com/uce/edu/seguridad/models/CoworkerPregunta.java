@@ -1,6 +1,7 @@
 package com.uce.edu.seguridad.models;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "coworker_pregunta")
 public class CoworkerPregunta implements Serializable {
 
@@ -23,12 +25,8 @@ public class CoworkerPregunta implements Serializable {
 
     private Integer calificacion;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "id_coworker", referencedColumnName = "id_coworker")
-    private Coworker coworker;
-
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "id_pregunta", referencedColumnName = "id_pregunta")
+    @ManyToOne(cascade = CascadeType.MERGE, optional = false)
+    @JoinColumn(name = "id_pregunta")
     private Pregunta pregunta;
 
 }

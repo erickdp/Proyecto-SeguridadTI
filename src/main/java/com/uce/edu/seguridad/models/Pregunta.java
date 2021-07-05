@@ -22,10 +22,7 @@ public class Pregunta implements Serializable {
 
     private String pregunta;
 
-    @OneToMany(mappedBy = "pregunta")
-    private List<CoworkerPregunta> coworkers;
-
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE, optional = false)
     @JoinColumn(name = "id_formulario")
     private Formulario formulario;
 

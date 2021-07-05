@@ -35,4 +35,9 @@ public class CoworkerServiceImp implements CoworkerService {
     public void actualizarEntidad(Coworker entidad) {
 
     }
+
+    @Override
+    public Coworker buscarPorMailInstitucional(String mailInstitucional) {
+        return this.coworkerRepository.findByMailInstitucional(mailInstitucional);
+    }
 }

@@ -1,12 +1,10 @@
 package com.uce.edu.seguridad.models;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @Entity
@@ -23,8 +21,5 @@ public class Formulario implements Serializable {
 
     @Column(name = "tipo_formulario")
     private String tipoFormulario;
-
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "formulario")
-    private List<Pregunta> preguntas;
 
 }

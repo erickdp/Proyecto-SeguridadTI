@@ -1,6 +1,5 @@
 package com.uce.edu.seguridad.models;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,14 +23,8 @@ public class Coworker implements Serializable {
     @Column(name = "mail")
     private String mailInstitucional;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_usuario", nullable = false)
-    private Usuario usuario;
-
-    @OneToMany(mappedBy = "coworker")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @JoinColumn(name = "id_coworker")
     private List<CoworkerPregunta> preguntas;
 
-    @ManyToOne
-    @JoinColumn(name = "id_universidad")
-    private Universidad universidad;
 }
