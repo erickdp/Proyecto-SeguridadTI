@@ -15,8 +15,8 @@ public class FormularioServiceImp implements FormularioService {
     private FormularioRepository formularioRepository;
 
     @Override
-    public void guardar(Formulario entidad) {
-
+    public Formulario guardar(Formulario entidad) {
+        return null;
     }
 
     @Override
@@ -31,8 +31,8 @@ public class FormularioServiceImp implements FormularioService {
     }
 
     @Override
-    public void actualizarEntidad(Formulario entidad) {
-
+    public Formulario actualizarEntidad(Formulario entidad) {
+        return null;
     }
 
     @Override

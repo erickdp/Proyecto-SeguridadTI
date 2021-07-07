@@ -17,8 +17,8 @@ public class PreguntaServiceImp implements PreguntaService {
 
     @Override
     @Transactional
-    public void guardar(Pregunta entidad) {
-        this.preguntaRepositry.save(entidad);
+    public Pregunta guardar(Pregunta entidad) {
+        return this.preguntaRepositry.save(entidad);
     }
 
     @Override
@@ -34,8 +34,8 @@ public class PreguntaServiceImp implements PreguntaService {
     }
 
     @Override
-    public void actualizarEntidad(Pregunta entidad) {
-
+    public Pregunta actualizarEntidad(Pregunta entidad) {
+        return null;
     }
 
     @Override

@@ -17,8 +17,8 @@ public class UniversidadServiceImp implements UniversidadService {
     private UniversidadRepository universidadRepository;
 
     @Override
-    public void guardar(Universidad entidad) {
-        this.universidadRepository.save(entidad);
+    public Universidad guardar(Universidad entidad) {
+        return this.universidadRepository.save(entidad);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class UniversidadServiceImp implements UniversidadService {
     }
 
     @Override
-    public void actualizarEntidad(Universidad entidad) {
-
+    public Universidad actualizarEntidad(Universidad entidad) {
+        return null;
     }
 }

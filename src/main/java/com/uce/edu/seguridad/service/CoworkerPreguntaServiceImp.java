@@ -16,8 +16,8 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService{
 
     @Override
     @Transactional
-    public void guardar(CoworkerPregunta entidad) {
-        this.coworkerPreguntaRepository.save(entidad);
+    public CoworkerPregunta guardar(CoworkerPregunta entidad) {
+        return this.coworkerPreguntaRepository.save(entidad);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService{
     }
 
     @Override
-    public void actualizarEntidad(CoworkerPregunta entidad) {
-
+    public CoworkerPregunta actualizarEntidad(CoworkerPregunta entidad) {
+        return null;
     }
 }

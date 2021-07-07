@@ -1,12 +1,9 @@
 package com.uce.edu.seguridad.models;
 
-import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity

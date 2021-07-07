@@ -10,14 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class UsuarioServiceImp implements UsuarioService{
+public class UsuarioServiceImp implements UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Override
-    public void guardar(Usuario entidad) {
-        this.usuarioRepository.save(entidad);
+    public Usuario guardar(Usuario entidad) {
+        return this.usuarioRepository.save(entidad);
     }
 
     @Override
@@ -32,8 +32,8 @@ public class UsuarioServiceImp implements UsuarioService{
     }
 
     @Override
-    public void actualizarEntidad(Usuario entidad) {
-
+    public Usuario actualizarEntidad(Usuario entidad) {
+        return null;
     }
 
     @Override

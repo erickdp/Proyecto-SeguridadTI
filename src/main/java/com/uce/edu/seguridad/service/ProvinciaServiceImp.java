@@ -16,8 +16,8 @@ public class ProvinciaServiceImp implements ProvinciaService{
 
     @Override
     @Transactional
-    public void guardar(Provincia entidad) {
-        this.provinciaRepository.save(entidad);
+    public Provincia guardar(Provincia entidad) {
+        return this.provinciaRepository.save(entidad);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ProvinciaServiceImp implements ProvinciaService{
 
     @Override
     @Transactional(readOnly = false)
-    public void actualizarEntidad(Provincia entidad) {
-        this.provinciaRepository.save(entidad);
+    public Provincia actualizarEntidad(Provincia entidad) {
+        return this.provinciaRepository.save(entidad);
     }
 }

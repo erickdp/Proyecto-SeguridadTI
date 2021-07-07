@@ -1,10 +1,14 @@
 package com.uce.edu.seguridad.controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.uce.edu.seguridad.models.*;
 import com.uce.edu.seguridad.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -51,12 +55,15 @@ public class ControladoPrincipal {
     // Metodo para agregar pregunta mediante el id del formulario y la pregunta en si
     //    Para enviar una pregunta con espacios hacer %20
 //    el id del formulario es tipo numero y la pregunta es cadena
+    // Al agregar una pregunta esta se agrega para todos los participantes con calificacion de 0
     @GetMapping("/agregarPregunta/{idformulario}/{pregunta}")
     public Pregunta agregarPregunta(
             @PathVariable(name = "idformulario") Long idformulario,
             @PathVariable(name = "pregunta") String pregunta) {
         var formularioA = this.formularioService.consultarPorId(idformulario);
-        return this.preguntaService.agregarPreguntaAFormulario(pregunta, formularioA);
+        var preguntaA = this.preguntaService.agregarPreguntaAFormulario(pregunta, formularioA);
+        this.coworkerService.agreagarNuevaPregunta(preguntaA); // Aqui se agrega la neuva pregunta al usuario con calificacion de 0
+        return preguntaA;
     }
 
     // Con este metodo se permite agregar calificacion a la pregunta mediante el id de la pregunta y la calificacion en si
@@ -90,6 +97,7 @@ public class ControladoPrincipal {
     Para crear un nuevo coworker se lo debe de enviar mediante formato JSON y solo es necesario
     enviar las llaves foraneas a las entidades a relacionar, no todos sus atributos, como rol o uni
     1. Para coworkers se le debe enviar el idRol = 2, no otro
+    2. Cuando se crea un nuevo coworker la calificacion de todas las preguntas es 0
     Ej:
     {
     "mailInstitucional": "pedrop@uce.com",
@@ -108,8 +116,41 @@ public class ControladoPrincipal {
     }
     * */
     @PostMapping("/crearCoworker")
-    public void crearCoworker(@RequestBody Coworker nuevoCoworker) {
-        this.coworkerService.guardar(nuevoCoworker);
+    public Coworker crearCoworker(@RequestBody Coworker nuevoCoworker) {
+        return this.coworkerService.setearPreguntas(nuevoCoworker, this.preguntaService.listarEntidad());
+    }
+
+    /*
+    Para actualizar la calificacion de la pregunta se debe de enviar un json como el ejemplo
+    siguiente:
+    1. Cada objeto es representado con {} y se debe de empezar con [], ademas solo es necesario
+    enviar los atributos especificados en el ejemplo, no mas
+    [
+    {
+        "idCoworkerPregunta": 34,
+        "calificacion": 3,
+        "pregunta": {
+            "idPregunta": 5
+        }
+    },
+    {
+        "idCoworkerPregunta": 35,
+        "calificacion": 7,
+        "pregunta": {
+            "idPregunta": 6
+        }
+    }
+]
+    * */
+    @PostMapping("/actualizarPreguntas/{idCoworker}")
+    public Coworker actualizarPreguntas(
+            @RequestBody String listaPreguntas,
+            @PathVariable Long idCoworker
+    ) {
+        var gson = new Gson();
+        Type type = new TypeToken<List<CoworkerPregunta>>(){}.getType();
+        List<CoworkerPregunta> preguntasJson = gson.fromJson(listaPreguntas, type);
+        return this.coworkerService.actualizarCalificacion(idCoworker, preguntasJson);
     }
 
     /*
@@ -137,6 +178,24 @@ public class ControladoPrincipal {
             @PathVariable(name = "IndentificadorU") Long id
     ) {
         return this.coworkerService.buscarPorUnivesidad(id);
+    }
+
+//    Este metodo permite obtener las preguntas de un determinado Coworker
+    @GetMapping("/preguntasCoworker/{idCoworker}")
+    public List<CoworkerPregunta> preguntasCoworker(
+            @PathVariable(name = "idCoworker") Long id
+    ) {
+        return this.coworkerService.buscarCowokerPorId(id).getPreguntas();
+    }
+
+//    NO TOMAR EN CUENTA
+//    Este metodo sera usado luego cuando solo se desee enviar JSON desde java
+    @GetMapping("/obtenerJson")
+    public HashMap<String, Integer> obtenerJson() {
+        var mapa = new HashMap<String, Integer>();
+        mapa.put("edad", 22);
+        mapa.put("altura", 165);
+        return mapa;
     }
 
 }

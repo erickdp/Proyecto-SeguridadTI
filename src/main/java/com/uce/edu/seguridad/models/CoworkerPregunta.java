@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -29,4 +30,11 @@ public class CoworkerPregunta implements Serializable {
     @JoinColumn(name = "id_pregunta")
     private Pregunta pregunta;
 
+    @Override
+    public boolean equals(Object o) {
+        CoworkerPregunta that = (CoworkerPregunta) o;
+        return this.getIdCoworkerPregunta().equals(that.getIdCoworkerPregunta())
+                &&
+                this.getPregunta().getIdPregunta().equals(that.getPregunta().getIdPregunta());
+    }
 }
