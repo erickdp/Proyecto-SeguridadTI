@@ -1,5 +1,6 @@
 package com.uce.edu.seguridad.service;
 
+import com.uce.edu.seguridad.models.Formulario;
 import com.uce.edu.seguridad.models.Pregunta;
 import com.uce.edu.seguridad.repository.PreguntaRepositry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class PreguntaServiceImp implements PreguntaService{
+public class PreguntaServiceImp implements PreguntaService {
 
     @Autowired
     private PreguntaRepositry preguntaRepositry;
@@ -35,5 +36,14 @@ public class PreguntaServiceImp implements PreguntaService{
     @Override
     public void actualizarEntidad(Pregunta entidad) {
 
+    }
+
+    @Override
+    public Pregunta agregarPreguntaAFormulario(String pregunta, Formulario formulario) {
+        var preguntaAgregar = new Pregunta();
+        preguntaAgregar.setPregunta(pregunta);
+        preguntaAgregar.setFormulario(formulario);
+        this.preguntaRepositry.save(preguntaAgregar);
+        return preguntaAgregar;
     }
 }

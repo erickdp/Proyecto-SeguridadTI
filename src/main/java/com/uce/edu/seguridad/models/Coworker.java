@@ -27,4 +27,11 @@ public class Coworker implements Serializable {
     @JoinColumn(name = "id_coworker")
     private List<CoworkerPregunta> preguntas;
 
+    @ManyToOne(cascade = CascadeType.MERGE, optional = false)
+    @JoinColumn(name = "id_universidad")
+    private Universidad universidad;
+
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
 }

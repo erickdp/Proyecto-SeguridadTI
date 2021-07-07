@@ -26,6 +26,12 @@ public class ControladoPrincipal {
     @Autowired
     private ProvinciaService provinciaService;
 
+    @Autowired
+    private UniversidadService universidadService;
+
+    @Autowired
+    private CoworkerPreguntaService coworkerPreguntaService;
+
     // Metodo para iniciar session, necesita el nombre del usuario y su pass
     // Para sabe si es coworker u admin utilizar el atributo de Rol.tipoRol
     @GetMapping("/iniciarSession/{usuario}/{password}")
@@ -50,11 +56,7 @@ public class ControladoPrincipal {
             @PathVariable(name = "idformulario") Long idformulario,
             @PathVariable(name = "pregunta") String pregunta) {
         var formularioA = this.formularioService.consultarPorId(idformulario);
-        var preguntaA = new Pregunta();
-        preguntaA.setPregunta(pregunta);
-        preguntaA.setFormulario(formularioA);
-        this.preguntaService.guardar(preguntaA);
-        return preguntaA;
+        return this.preguntaService.agregarPreguntaAFormulario(pregunta, formularioA);
     }
 
     // Con este metodo se permite agregar calificacion a la pregunta mediante el id de la pregunta y la calificacion en si
@@ -66,23 +68,75 @@ public class ControladoPrincipal {
             @PathVariable(name = "calificacion") Integer calificacion
     ) {
         var coworkerA = this.coworkerService.buscarPorMailInstitucional(coworker.getMailInstitucional());
-        var preguntas = coworkerA.getPreguntas();
         var preguntaA = this.preguntaService.consultarPorId(idPregunta);
 
-        var coworkerPregunta = new CoworkerPregunta();
-        coworkerPregunta.setPregunta(preguntaA);
-        coworkerPregunta.setCalificacion(calificacion);
-
-        preguntas.add(coworkerPregunta);
-
-        this.coworkerService.guardar(coworkerA);
-
-        return coworkerA;
+        return this.coworkerService.calificarPregunta(coworkerA, preguntaA, calificacion);
     }
 
+    //    Metodo para obtener (solo) todas las universidades registradas
     @GetMapping("/obtenerUniversidades")
     public List<Provincia> obtenerUniversidades() {
         return this.provinciaService.listarEntidad();
+    }
+
+    //    Con este metodo se va a poder obtener al todos los coworkerss y las preguntas que hayan echo con su calificacion
+//    para poder ser tratadas mediante graficos
+    @GetMapping("/calificionesPreguntas")
+    public List<Coworker> calificionesPreguntas() {
+        return this.coworkerService.listarEntidad();
+    }
+
+    /*
+    Para crear un nuevo coworker se lo debe de enviar mediante formato JSON y solo es necesario
+    enviar las llaves foraneas a las entidades a relacionar, no todos sus atributos, como rol o uni
+    1. Para coworkers se le debe enviar el idRol = 2, no otro
+    Ej:
+    {
+    "mailInstitucional": "pedrop@uce.com",
+    "usuario": {
+        "nombreUsuario": "pedrop",
+        "password": "123",
+        "nombres": "Pedro",
+        "apellidos": "Pascal",
+        "rol": {
+            "idRol": 2
+        }
+    },
+    "universidad": {
+        "idUniversidad": 1
+    }
+    }
+    * */
+    @PostMapping("/crearCoworker")
+    public void crearCoworker(@RequestBody Coworker nuevoCoworker) {
+        this.coworkerService.guardar(nuevoCoworker);
+    }
+
+    /*
+    Para crear un administrador se debe de enviar el solo los atributos del objeto
+    usuario junto con el rol en especifico el idRol = 1 en formato JSON
+    Ej:
+    {
+    "nombreUsuario": "suarez",
+    "password": "123",
+    "nombres": "Freddy",
+    "apellidos": "Suarez",
+    "rol": {
+        "idRol": 1
+    }
+    }
+    * */
+    @PostMapping("/crearAdministador")
+    public void crearAdministador(@RequestBody Usuario nuevoAdministrador) {
+        this.usuarioService.guardar(nuevoAdministrador);
+    }
+
+    //    Permite obtener los resultados de los formularios de univeridades en especifico
+    @GetMapping("/scorePorUniversidad/{IndentificadorU}")
+    public List<Coworker> scorePorUniversidad(
+            @PathVariable(name = "IndentificadorU") Long id
+    ) {
+        return this.coworkerService.buscarPorUnivesidad(id);
     }
 
 }

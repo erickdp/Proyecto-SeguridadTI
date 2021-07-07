@@ -2,6 +2,7 @@ package com.uce.edu.seguridad.service;
 
 import com.uce.edu.seguridad.models.Usuario;
 import com.uce.edu.seguridad.repository.UsuarioRepository;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ public class UsuarioServiceImp implements UsuarioService{
 
     @Override
     public void guardar(Usuario entidad) {
-
+        this.usuarioRepository.save(entidad);
     }
 
     @Override

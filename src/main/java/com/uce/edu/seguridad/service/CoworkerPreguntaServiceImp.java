@@ -26,8 +26,9 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CoworkerPregunta> listarEntidad() {
-        return null;
+        return this.coworkerPreguntaRepository.findAll();
     }
 
     @Override

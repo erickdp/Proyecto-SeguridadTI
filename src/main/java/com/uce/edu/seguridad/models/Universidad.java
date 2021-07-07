@@ -1,6 +1,5 @@
 package com.uce.edu.seguridad.models;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,9 +22,4 @@ public class Universidad implements Serializable {
 
     @Column(name = "nombre_universidad")
     private String nombreUniversidad;
-
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name = "id_universidad")
-    private List<Coworker> coworkers;
-
 }
