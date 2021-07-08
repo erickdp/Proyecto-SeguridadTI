@@ -66,6 +66,8 @@ public class ControladoPrincipal {
         return preguntaA;
     }
 
+//    IMPORTANTE!!
+//   YA NO USAR este metodo y usar para calificar las preguntas actualizarPreguntas para calificaciones
     // Con este metodo se permite agregar calificacion a la pregunta mediante el id de la pregunta y la calificacion en si
     // idpregunta, calificacion enviar un entero (si se puede de tipo Long) y el coworker en json
     @PostMapping("/calificarPregunta/{idpregunta}/{calificacion}")
