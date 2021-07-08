@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/seguridad")
 public class ControladoPrincipal {
 
