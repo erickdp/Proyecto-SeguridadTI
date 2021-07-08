@@ -200,4 +200,13 @@ public class ControladoPrincipal {
         return mapa;
     }
 
+//    Metodo que permite obtener el promedio de cada pregunta realizada por todos los participates de un determinado formulario
+    @GetMapping("/promedioPreguntas/{idFormulario}")
+    public HashMap<String, Double> promedioPreguntas(
+            @PathVariable(value = "idFormulario") Long id
+    ) {
+        var preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(id);
+        return this.coworkerPreguntaService.promedioPorPreguntaDeFormulario(preguntasFiltradas);
+    }
+
 }

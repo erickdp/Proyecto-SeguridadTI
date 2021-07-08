@@ -46,4 +46,9 @@ public class PreguntaServiceImp implements PreguntaService {
         this.preguntaRepositry.save(preguntaAgregar);
         return preguntaAgregar;
     }
+
+    @Override
+    public List<Pregunta> obtenerPreguntasPorFormulario(Long idFormulario) {
+        return this.preguntaRepositry.findPreguntasByFormulario(idFormulario);
+    }
 }

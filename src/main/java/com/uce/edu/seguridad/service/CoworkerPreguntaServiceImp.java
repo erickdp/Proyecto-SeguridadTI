@@ -1,11 +1,13 @@
 package com.uce.edu.seguridad.service;
 
 import com.uce.edu.seguridad.models.CoworkerPregunta;
+import com.uce.edu.seguridad.models.Pregunta;
 import com.uce.edu.seguridad.repository.CoworkerPreguntaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -34,5 +36,18 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService{
     @Override
     public CoworkerPregunta actualizarEntidad(CoworkerPregunta entidad) {
         return null;
+    }
+
+    @Override
+    public HashMap<String, Double> promedioPorPreguntaDeFormulario(List<Pregunta> preguntasFiltradas) {
+        var promedioPreguntas = new HashMap<String, Double>();
+        Double promedio = 0d;
+        for (Pregunta p :
+                preguntasFiltradas) {
+            promedio += this.coworkerPreguntaRepository.getAVGByPreguntaId(p.getIdPregunta());
+            promedioPreguntas.put(p.getPregunta(), promedio);
+            promedio = 0d;
+        }
+        return promedioPreguntas;
     }
 }
