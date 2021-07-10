@@ -7,5 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface CoworkerPreguntaService extends BaseService<CoworkerPregunta> {
-    HashMap<String, Double> promedioPorPreguntaDeFormulario(List<Pregunta> preguntasFiltradas);
+    HashMap<String, Double> promedioPorPreguntaDeFormulario(List<Pregunta> preguntasFiltradas, Long idUniversidad);
+
+    HashMap<String, Long> obtenerParticipantesPorPregunta(List<Pregunta> preguntasFiltradas, Long idUniversdida);
 }

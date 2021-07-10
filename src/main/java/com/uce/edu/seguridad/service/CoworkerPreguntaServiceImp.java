@@ -39,11 +39,11 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService {
     }
 
     @Override
-    public HashMap<String, Double> promedioPorPreguntaDeFormulario(List<Pregunta> preguntasFiltradas) {
+    public HashMap<String, Double> promedioPorPreguntaDeFormulario(List<Pregunta> preguntasFiltradas, Long idUniversidad) {
         var promedioPreguntas = new HashMap<String, Double>();
         for (Pregunta p :
                 preguntasFiltradas) {
-            var avgDB = this.coworkerPreguntaRepository.getAVGByPreguntaId(p.getIdPregunta());
+            var avgDB = this.coworkerPreguntaRepository.getAVGByPreguntaId(p.getIdPregunta(), idUniversidad);
             if (avgDB != null) { // Cuando todas las preguntas tienen calificacion 0 devuelve null pero en eralidad seria avg 0
                 promedioPreguntas.put(p.getPregunta(), avgDB);
             } else {
@@ -51,5 +51,20 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService {
             }
         }
         return promedioPreguntas;
+    }
+
+    @Override
+    public HashMap<String, Long> obtenerParticipantesPorPregunta(List<Pregunta> preguntasFiltradas, Long idUniversdida) {
+        var participantes = new HashMap<String, Long>();
+        for (Pregunta p :
+                preguntasFiltradas) {
+            var totalParticipantes = this.coworkerPreguntaRepository.getCoworkerPerQuestion(p.getIdPregunta(), idUniversdida);
+            if (totalParticipantes != null) { // Cuando todas las preguntas tienen calificacion 0 devuelve null pero en eralidad seria avg 0
+                participantes.put(p.getPregunta(), totalParticipantes);
+            } else {
+                participantes.put(p.getPregunta(), 0L);
+            }
+        }
+        return participantes;
     }
 }

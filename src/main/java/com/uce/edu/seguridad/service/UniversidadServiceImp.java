@@ -37,4 +37,9 @@ public class UniversidadServiceImp implements UniversidadService {
     public Universidad actualizarEntidad(Universidad entidad) {
         return null;
     }
+
+    @Override
+    public Universidad buscarUnieversidadPorNombre(String nombre) {
+        return this.universidadRepository.findByNombreUniversidad(nombre);
+    }
 }

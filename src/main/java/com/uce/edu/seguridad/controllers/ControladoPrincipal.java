@@ -202,12 +202,25 @@ public class ControladoPrincipal {
     }
 
 //    Metodo que permite obtener el promedio de cada pregunta realizada por todos los participates de un determinado formulario
-    @GetMapping("/promedioPreguntas/{idFormulario}")
+//    y para una determinada universidad
+    @GetMapping("/promedioPreguntas/{idFormulario}/{nombreUniversidad}")
     public HashMap<String, Double> promedioPreguntas(
-            @PathVariable(value = "idFormulario") Long id
+            @PathVariable(value = "idFormulario") Long id,
+            @PathVariable(value = "nombreUniversidad") String nombre
     ) {
+        var universidad = this.universidadService.buscarUnieversidadPorNombre(nombre);
         var preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(id);
-        return this.coworkerPreguntaService.promedioPorPreguntaDeFormulario(preguntasFiltradas);
+        return this.coworkerPreguntaService.promedioPorPreguntaDeFormulario(preguntasFiltradas, universidad.getIdUniversidad());
     }
 
+//    Metodo que permite obtener el numero de participantes de una determinada universidad para algun formulario
+    @GetMapping("/participantesPregunta/{idFormulario}/{nombreUniversidad}")
+    public HashMap<String, Long> participantesPregunta(
+            @PathVariable(value = "idFormulario") Long id,
+            @PathVariable(value = "nombreUniversidad") String nombre
+    ) {
+        var universidad = this.universidadService.buscarUnieversidadPorNombre(nombre);
+        var preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(id);
+        return this.coworkerPreguntaService.obtenerParticipantesPorPregunta(preguntasFiltradas, universidad.getIdUniversidad());
+    }
 }
