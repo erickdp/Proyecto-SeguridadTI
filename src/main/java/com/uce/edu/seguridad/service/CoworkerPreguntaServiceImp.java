@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService{
+public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService {
 
     @Autowired
     private CoworkerPreguntaRepository coworkerPreguntaRepository;
@@ -41,12 +41,14 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService{
     @Override
     public HashMap<String, Double> promedioPorPreguntaDeFormulario(List<Pregunta> preguntasFiltradas) {
         var promedioPreguntas = new HashMap<String, Double>();
-        Double promedio = 0d;
         for (Pregunta p :
                 preguntasFiltradas) {
-            promedio += this.coworkerPreguntaRepository.getAVGByPreguntaId(p.getIdPregunta());
-            promedioPreguntas.put(p.getPregunta(), promedio);
-            promedio = 0d;
+            var avgDB = this.coworkerPreguntaRepository.getAVGByPreguntaId(p.getIdPregunta());
+            if (avgDB != null) { // Cuando todas las preguntas tienen calificacion 0 devuelve null pero en eralidad seria avg 0
+                promedioPreguntas.put(p.getPregunta(), avgDB);
+            } else {
+                promedioPreguntas.put(p.getPregunta(), 0d);
+            }
         }
         return promedioPreguntas;
     }
