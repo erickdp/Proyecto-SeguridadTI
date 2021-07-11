@@ -7,8 +7,6 @@ import com.uce.edu.seguridad.models.Pregunta;
 import java.util.List;
 
 public interface CoworkerService extends BaseService<Coworker> {
-    Coworker buscarPorMailInstitucional(String mailInstitucional);
-
     List<Coworker> buscarPorUnivesidad(Long id);
 
     Coworker calificarPregunta(Coworker coworker, Pregunta pregunta, Integer calificacion);
@@ -20,4 +18,6 @@ public interface CoworkerService extends BaseService<Coworker> {
     Coworker buscarCowokerPorId(Long id);
 
     Coworker actualizarCalificacion(Long idCoworker, List<CoworkerPregunta> preguntas);
+
+    Coworker buscarCoworkerPorNombreUsuario(String nombreUsuario);
 }

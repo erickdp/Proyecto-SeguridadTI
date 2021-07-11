@@ -38,7 +38,7 @@ public class ControladoPrincipal {
     private CoworkerPreguntaService coworkerPreguntaService;
 
     // Metodo para iniciar session, necesita el nombre del usuario y su pass
-    // Para sabe si es coworker u admin utilizar el atributo de Rol.tipoRol
+    // Para sabe si es coworker u admin utilizar el atributo de Rol.tipoRol OK
     @GetMapping("/iniciarSession/{usuario}/{password}")
     public Usuario iniciarSession(
             @PathVariable(name = "usuario") String usuario,
@@ -47,7 +47,7 @@ public class ControladoPrincipal {
         return usuarioRepo;
     }
 
-    // Metodo que devuelve las preguntas y al tipo de formulario a donde pertenece
+    // Metodo que devuelve las preguntas y al tipo de formulario a donde pertenece OK
     @GetMapping("/obtenerPreguntas")
     public List<Pregunta> obtenerPreguntas() {
         return this.preguntaService.listarEntidad();
@@ -56,7 +56,7 @@ public class ControladoPrincipal {
     // Metodo para agregar pregunta mediante el id del formulario y la pregunta en si
     //    Para enviar una pregunta con espacios hacer %20
 //    el id del formulario es tipo numero y la pregunta es cadena
-    // Al agregar una pregunta esta se agrega para todos los participantes con calificacion de 0
+    // Al agregar una pregunta esta se agrega para todos los participantes con calificacion de 0 OK
     @GetMapping("/agregarPregunta/{idformulario}/{pregunta}")
     public Pregunta agregarPregunta(
             @PathVariable(name = "idformulario") Long idformulario,
@@ -71,26 +71,26 @@ public class ControladoPrincipal {
 //   YA NO USAR este metodo y usar para calificar las preguntas actualizarPreguntas para calificaciones
     // Con este metodo se permite agregar calificacion a la pregunta mediante el id de la pregunta y la calificacion en si
     // idpregunta, calificacion enviar un entero (si se puede de tipo Long) y el coworker en json
-    @PostMapping("/calificarPregunta/{idpregunta}/{calificacion}")
-    public Coworker calificarPregunta(
-            @RequestBody Coworker coworker, // Se necesita enviar un JSON de tipo Coworker, basta con el parametro del mail
-            @PathVariable(name = "idpregunta") Long idPregunta,
-            @PathVariable(name = "calificacion") Integer calificacion
-    ) {
-        var coworkerA = this.coworkerService.buscarPorMailInstitucional(coworker.getMailInstitucional());
-        var preguntaA = this.preguntaService.consultarPorId(idPregunta);
+//    @PostMapping("/calificarPregunta/{idpregunta}/{calificacion}")
+//    public Coworker calificarPregunta(
+//            @RequestBody Coworker coworker, // Se necesita enviar un JSON de tipo Coworker, basta con el parametro del mail
+//            @PathVariable(name = "idpregunta") Long idPregunta,
+//            @PathVariable(name = "calificacion") Integer calificacion
+//    ) {
+//        var coworkerA = this.coworkerService.buscarPorMailInstitucional(coworker.getMailInstitucional());
+//        var preguntaA = this.preguntaService.consultarPorId(idPregunta);
+//
+//        return this.coworkerService.calificarPregunta(coworkerA, preguntaA, calificacion);
+//    }
 
-        return this.coworkerService.calificarPregunta(coworkerA, preguntaA, calificacion);
-    }
-
-    //    Metodo para obtener (solo) todas las universidades registradas
+    //    Metodo para obtener (solo) todas las universidades registradas OK
     @GetMapping("/obtenerUniversidades")
-    public List<Provincia> obtenerUniversidades() {
-        return this.provinciaService.listarEntidad();
+    public List<Universidad> obtenerUniversidades() {
+        return this.universidadService.listarEntidad();
     }
 
     //    Con este metodo se va a poder obtener al todos los coworkerss y las preguntas que hayan echo con su calificacion
-//    para poder ser tratadas mediante graficos
+//    para poder ser tratadas mediante graficos OK
     @GetMapping("/calificionesPreguntas")
     public List<Coworker> calificionesPreguntas() {
         return this.coworkerService.listarEntidad();
@@ -116,7 +116,7 @@ public class ControladoPrincipal {
     "universidad": {
         "idUniversidad": 1
     }
-    }
+    } OK
     * */
     @PostMapping("/crearCoworker")
     public Coworker crearCoworker(@RequestBody Coworker nuevoCoworker) {
@@ -145,15 +145,17 @@ public class ControladoPrincipal {
     }
 ]
     * */
-    @PostMapping("/actualizarPreguntas/{idCoworker}")
+    @PostMapping("/actualizarPreguntas/{nombreUsuario}")
     public Coworker actualizarPreguntas(
             @RequestBody String listaPreguntas,
-            @PathVariable Long idCoworker
+            @PathVariable String nombreUsuario
     ) {
+        var coworker = this.coworkerService.buscarCoworkerPorNombreUsuario(nombreUsuario);
         var gson = new Gson();
-        Type type = new TypeToken<List<CoworkerPregunta>>(){}.getType();
+        Type type = new TypeToken<List<CoworkerPregunta>>() {
+        }.getType();
         List<CoworkerPregunta> preguntasJson = gson.fromJson(listaPreguntas, type);
-        return this.coworkerService.actualizarCalificacion(idCoworker, preguntasJson);
+        return this.coworkerService.actualizarCalificacion(coworker.getIdCoworker(), preguntasJson);
     }
 
     /*
@@ -168,30 +170,32 @@ public class ControladoPrincipal {
     "rol": {
         "idRol": 1
     }
-    }
+    } OK
     * */
     @PostMapping("/crearAdministador")
     public void crearAdministador(@RequestBody Usuario nuevoAdministrador) {
         this.usuarioService.guardar(nuevoAdministrador);
     }
 
-    //    Permite obtener los resultados de los formularios de univeridades en especifico
-    @GetMapping("/scorePorUniversidad/{IndentificadorU}")
+    //    Permite obtener los resultados de los formularios de univeridades en especifico OK
+    @GetMapping("/scorePorUniversidad/{nombreUniversidad}")
     public List<Coworker> scorePorUniversidad(
-            @PathVariable(name = "IndentificadorU") Long id
+            @PathVariable(name = "nombreUniversidad") String universidad
     ) {
-        return this.coworkerService.buscarPorUnivesidad(id);
+        var universidadO = this.universidadService.buscarUnieversidadPorNombre(universidad);
+        return this.coworkerService.buscarPorUnivesidad(universidadO.getIdUniversidad());
     }
 
-//    Este metodo permite obtener las preguntas de un determinado Coworker
-    @GetMapping("/preguntasCoworker/{idCoworker}")
+    //    Este metodo permite obtener las preguntas de un determinado Coworker OK
+    @GetMapping("/preguntasCoworker/{nombreUsuario}")
     public List<CoworkerPregunta> preguntasCoworker(
-            @PathVariable(name = "idCoworker") Long id
+            @PathVariable(name = "nombreUsuario") String usuario
     ) {
-        return this.coworkerService.buscarCowokerPorId(id).getPreguntas();
+        var coworker = this.coworkerService.buscarCoworkerPorNombreUsuario(usuario);
+        return this.coworkerService.buscarCowokerPorId(coworker.getIdCoworker()).getPreguntas();
     }
 
-//    NO TOMAR EN CUENTA
+    //    NO TOMAR EN CUENTA
 //    Este metodo sera usado luego cuando solo se desee enviar JSON desde java
     @GetMapping("/obtenerJson")
     public HashMap<String, Integer> obtenerJson() {
@@ -201,26 +205,28 @@ public class ControladoPrincipal {
         return mapa;
     }
 
-//    Metodo que permite obtener el promedio de cada pregunta realizada por todos los participates de un determinado formulario
-//    y para una determinada universidad
-    @GetMapping("/promedioPreguntas/{idFormulario}/{nombreUniversidad}")
+    //    Metodo que permite obtener el promedio de cada pregunta realizada por todos los participates de un determinado formulario
+//    y para una determinada universidad PROBAR MAS
+    @GetMapping("/promedioPreguntas/{tipoFormulario}/{nombreUniversidad}")
     public HashMap<String, Double> promedioPreguntas(
-            @PathVariable(value = "idFormulario") Long id,
+            @PathVariable(value = "tipoFormulario") String formulario,
             @PathVariable(value = "nombreUniversidad") String nombre
     ) {
         var universidad = this.universidadService.buscarUnieversidadPorNombre(nombre);
-        var preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(id);
+        var formularioO = this.formularioService.buscarPorNombreFormulario(formulario);
+        var preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(formularioO.getIdFormulario());
         return this.coworkerPreguntaService.promedioPorPreguntaDeFormulario(preguntasFiltradas, universidad.getIdUniversidad());
     }
 
-//    Metodo que permite obtener el numero de participantes de una determinada universidad para algun formulario
-    @GetMapping("/participantesPregunta/{idFormulario}/{nombreUniversidad}")
+    //    Metodo que permite obtener el numero de participantes de una determinada universidad para algun formulario
+    @GetMapping("/participantesPregunta/{tipoFormulario}/{nombreUniversidad}")
     public HashMap<String, Long> participantesPregunta(
-            @PathVariable(value = "idFormulario") Long id,
+            @PathVariable(value = "tipoFormulario") String formulario,
             @PathVariable(value = "nombreUniversidad") String nombre
     ) {
         var universidad = this.universidadService.buscarUnieversidadPorNombre(nombre);
-        var preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(id);
+        var formularioO = this.formularioService.buscarPorNombreFormulario(formulario);
+        var preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(formularioO.getIdFormulario());
         return this.coworkerPreguntaService.obtenerParticipantesPorPregunta(preguntasFiltradas, universidad.getIdUniversidad());
     }
 }

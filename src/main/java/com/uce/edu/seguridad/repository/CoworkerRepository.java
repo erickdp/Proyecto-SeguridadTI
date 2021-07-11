@@ -8,7 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CoworkerRepository extends JpaRepository<Coworker, Long> {
-    Coworker findByMailInstitucional(String mailInstitucional);
+    @Query("SELECT c FROM Coworker c WHERE c.usuario.nombreUsuario = ?1")
+    Coworker findByNombreUsuario(String nombreUsuario);
 
     @Query("SELECT c FROM Coworker c WHERE c.universidad.idUniversidad = :idUniversidad")
     List<Coworker> findScoreUniversidad(@Param("idUniversidad") Long id);

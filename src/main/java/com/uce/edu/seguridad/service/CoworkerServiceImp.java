@@ -47,12 +47,6 @@ public class CoworkerServiceImp implements CoworkerService {
 
     @Override
     @Transactional
-    public Coworker buscarPorMailInstitucional(String mailInstitucional) {
-        return this.coworkerRepository.findByMailInstitucional(mailInstitucional);
-    }
-
-    @Override
-    @Transactional
     public List<Coworker> buscarPorUnivesidad(Long id) {
         return this.coworkerRepository.findScoreUniversidad(id);
     }
@@ -127,5 +121,10 @@ public class CoworkerServiceImp implements CoworkerService {
 //            });
 //        });
         return this.actualizarEntidad(coworker);
+    }
+
+    @Override
+    public Coworker buscarCoworkerPorNombreUsuario(String nombreUsuario) {
+        return this.coworkerRepository.findByNombreUsuario(nombreUsuario);
     }
 }
