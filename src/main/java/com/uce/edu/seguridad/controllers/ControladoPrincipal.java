@@ -12,6 +12,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -218,6 +219,31 @@ public class ControladoPrincipal {
         var formularioO = this.formularioService.buscarPorNombreFormulario(formulario);
         var preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(formularioO.getIdFormulario());
         return this.coworkerPreguntaService.promedioPorPreguntaDeFormulario(preguntasFiltradas, universidad.getIdUniversidad());
+    }
+
+    @GetMapping("/promedioPreguntasJson/{tipoFormulario}/{nombreUniversidad}")
+    public String promedioPreguntasJson(
+            @PathVariable(value = "tipoFormulario") String formulario,
+            @PathVariable(value = "nombreUniversidad") String nombre
+    ) {
+        var universidad = this.universidadService.buscarUnieversidadPorNombre(nombre);
+        var formularioO = this.formularioService.buscarPorNombreFormulario(formulario);
+        var preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(formularioO.getIdFormulario());
+        var mapa = this.coworkerPreguntaService.promedioPorPreguntaDeFormulario(preguntasFiltradas, universidad.getIdUniversidad());
+        String cadena = "";
+        int i = 1;
+        for (Map.Entry<String, Double> e : mapa.entrySet()) {
+            cadena += "{\n" +
+                    "\"pregunta\": \"" + e.getKey() + "\",\n" +
+                    "\"promedio\": " + e.getValue();
+            if (mapa.size() - i == 0) {
+                cadena += "\n}";
+            } else {
+                cadena += "\n},\n";
+            }
+            i++;
+        }
+        return cadena;
     }
 
     //    Metodo que permite obtener el numero de participantes de una determinada universidad para algun formulario
