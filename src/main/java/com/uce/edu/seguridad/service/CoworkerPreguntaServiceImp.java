@@ -75,6 +75,26 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService {
         return promedioPreguntas;
     }
 
+    @Override
+    public HashMap<String, HashMap<String, Double>> promedioYPreguntaDeFormulario(List<Pregunta> preguntasFiltradas, Long idUniversidad) {
+        var preguntas = new HashMap<String, HashMap<String, Double>>();
+        int i = 1;
+        for (Pregunta p :
+                preguntasFiltradas) {
+            var avgDB = this.coworkerPreguntaRepository.getAVGByPreguntaId(p.getIdPregunta(), idUniversidad);
+            if (avgDB != null) { // Cuando todas las preguntas tienen calificacion 0 devuelve null pero en eralidad seria avg 0
+                var promedio = new HashMap<String, Double>();
+                promedio.put("promedio", avgDB);
+                preguntas.put(p.getPregunta(), promedio);
+            } else {
+                var promedio = new HashMap<String, Double>();
+                promedio.put("promedio", 0d);
+                preguntas.put(p.getPregunta(), promedio);
+            }
+        }
+        return preguntas;
+    }
+
     // Se necesita mayor cohesion y bajo acoplamiento en estos metodos de servicio
     @Override
     public HashMap<String, Long> obtenerParticipantesPorPregunta(List<Pregunta> preguntasFiltradas, Long idUniversdida) {
