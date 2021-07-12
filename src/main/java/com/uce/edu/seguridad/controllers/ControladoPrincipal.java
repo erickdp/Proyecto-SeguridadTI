@@ -4,10 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.uce.edu.seguridad.models.*;
 import com.uce.edu.seguridad.service.*;
+import com.uce.edu.seguridad.util.Utileria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -228,5 +230,17 @@ public class ControladoPrincipal {
         var formularioO = this.formularioService.buscarPorNombreFormulario(formulario);
         var preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(formularioO.getIdFormulario());
         return this.coworkerPreguntaService.obtenerParticipantesPorPregunta(preguntasFiltradas, universidad.getIdUniversidad());
+    }
+
+    // Metodo que permite obtener a los participantes en funcion de su universidad
+    @GetMapping("/obtenerCoworkersPorUniversidad")
+    public HashMap<String, List<Usuario>> obtenerCoworkersPorUniversidad() {
+        var nuevoMapa = new HashMap<String, List<Usuario>>();
+        var universidades = this.universidadService.listarEntidad();
+        universidades.forEach(u -> {
+            var coworkers = this.coworkerService.buscarPorUnivesidad(u.getIdUniversidad());
+            nuevoMapa.put(u.getNombreUniversidad(), Utileria.filtrarUsuario(coworkers));
+        });
+        return nuevoMapa;
     }
 }

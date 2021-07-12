@@ -38,6 +38,7 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService {
         return null;
     }
 
+    // Se necesita mayor cohesion y bajo acoplamiento en estos metodos de servicio
     @Override
     public HashMap<String, Double> promedioPorPreguntaDeFormulario(List<Pregunta> preguntasFiltradas, Long idUniversidad) {
         var promedioPreguntas = new HashMap<String, Double>();
@@ -53,6 +54,7 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService {
         return promedioPreguntas;
     }
 
+    // Se necesita mayor cohesion y bajo acoplamiento en estos metodos de servicio
     @Override
     public HashMap<String, Long> obtenerParticipantesPorPregunta(List<Pregunta> preguntasFiltradas, Long idUniversdida) {
         var participantes = new HashMap<String, Long>();

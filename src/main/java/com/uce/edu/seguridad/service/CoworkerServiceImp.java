@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -46,7 +44,7 @@ public class CoworkerServiceImp implements CoworkerService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Coworker> buscarPorUnivesidad(Long id) {
         return this.coworkerRepository.findScoreUniversidad(id);
     }
@@ -76,6 +74,7 @@ public class CoworkerServiceImp implements CoworkerService {
         }
     }
 
+    // Se necesita mayor cohesion y bajo acoplamiento en estos metodos de servicio
     @Override
     public Coworker setearPreguntas(Coworker coworker, List<Pregunta> preguntaList) {
         var listaPreguntas = new ArrayList<CoworkerPregunta>();
@@ -96,6 +95,7 @@ public class CoworkerServiceImp implements CoworkerService {
         return this.coworkerRepository.findById(id).orElse(null);
     }
 
+    // Se necesita mayor cohesion y bajo acoplamiento en estos metodos de servicio
     @Override
     public Coworker actualizarCalificacion(
             Long idCoworker,
@@ -111,15 +111,6 @@ public class CoworkerServiceImp implements CoworkerService {
             }
         }
 
-//        listaAntigua.forEach(p -> {
-//            var preCalificada = p;
-//            preguntas.forEach(pa -> {
-//                var preCalificadaNueva = pa;
-//                if(preCalificada.equals(preCalificadaNueva)) {
-//                    preCalificada.setCalificacion(preCalificadaNueva.getCalificacion());
-//                }
-//            });
-//        });
         return this.actualizarEntidad(coworker);
     }
 
