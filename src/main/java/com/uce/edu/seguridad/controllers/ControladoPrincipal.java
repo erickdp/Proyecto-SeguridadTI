@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -211,7 +208,7 @@ public class ControladoPrincipal {
     //    Metodo que permite obtener el promedio de cada pregunta realizada por todos los participates de un determinado formulario
 //    y para una determinada universidad PROBAR MAS
     @GetMapping("/promedioPreguntas/{tipoFormulario}/{nombreUniversidad}")
-    public HashMap<String, Double> promedioPreguntas(
+    public LinkedHashMap<String, String> promedioPreguntas(
             @PathVariable(value = "tipoFormulario") String formulario,
             @PathVariable(value = "nombreUniversidad") String nombre
     ) {
@@ -221,29 +218,15 @@ public class ControladoPrincipal {
         return this.coworkerPreguntaService.promedioPorPreguntaDeFormulario(preguntasFiltradas, universidad.getIdUniversidad());
     }
 
-    @GetMapping("/promedioPreguntasJson/{tipoFormulario}/{nombreUniversidad}")
-    public String promedioPreguntasJson(
+    @GetMapping("/soloPromedioPreguntas/{tipoFormulario}/{nombreUniversidad}")
+    public LinkedHashMap<String, Double> soloPromedioPreguntas(
             @PathVariable(value = "tipoFormulario") String formulario,
             @PathVariable(value = "nombreUniversidad") String nombre
     ) {
         var universidad = this.universidadService.buscarUnieversidadPorNombre(nombre);
         var formularioO = this.formularioService.buscarPorNombreFormulario(formulario);
         var preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(formularioO.getIdFormulario());
-        var mapa = this.coworkerPreguntaService.promedioPorPreguntaDeFormulario(preguntasFiltradas, universidad.getIdUniversidad());
-        String cadena = "";
-        int i = 1;
-        for (Map.Entry<String, Double> e : mapa.entrySet()) {
-            cadena += "{\n" +
-                    "\"pregunta\": \"" + e.getKey() + "\",\n" +
-                    "\"promedio\": " + e.getValue();
-            if (mapa.size() - i == 0) {
-                cadena += "\n}";
-            } else {
-                cadena += "\n},\n";
-            }
-            i++;
-        }
-        return cadena;
+        return this.coworkerPreguntaService.soloPromedioPorPreguntaDeFormulario(preguntasFiltradas, universidad.getIdUniversidad());
     }
 
     //    Metodo que permite obtener el numero de participantes de una determinada universidad para algun formulario

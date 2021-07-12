@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Service
@@ -40,15 +42,34 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService {
 
     // Se necesita mayor cohesion y bajo acoplamiento en estos metodos de servicio
     @Override
-    public HashMap<String, Double> promedioPorPreguntaDeFormulario(List<Pregunta> preguntasFiltradas, Long idUniversidad) {
-        var promedioPreguntas = new HashMap<String, Double>();
+    public LinkedHashMap<String, String> promedioPorPreguntaDeFormulario(List<Pregunta> preguntasFiltradas, Long idUniversidad) {
+        var promedioPreguntas = new LinkedHashMap<String, String>();
+        int i = 1;
         for (Pregunta p :
                 preguntasFiltradas) {
             var avgDB = this.coworkerPreguntaRepository.getAVGByPreguntaId(p.getIdPregunta(), idUniversidad);
             if (avgDB != null) { // Cuando todas las preguntas tienen calificacion 0 devuelve null pero en eralidad seria avg 0
-                promedioPreguntas.put(p.getPregunta(), avgDB);
+                promedioPreguntas.put("pregunta " + i, p.getPregunta());
+                promedioPreguntas.put("promedio " + i++, String.valueOf(avgDB));
             } else {
-                promedioPreguntas.put(p.getPregunta(), 0d);
+                promedioPreguntas.put("pregunta " + i, p.getPregunta());
+                promedioPreguntas.put("promedio " + i++, "0.0");
+            }
+        }
+        return promedioPreguntas;
+    }
+
+    @Override
+    public LinkedHashMap<String, Double> soloPromedioPorPreguntaDeFormulario(List<Pregunta> preguntasFiltradas, Long idUniversidad) {
+        var promedioPreguntas = new LinkedHashMap<String, Double>();
+        int i = 1;
+        for (Pregunta p :
+                preguntasFiltradas) {
+            var avgDB = this.coworkerPreguntaRepository.getAVGByPreguntaId(p.getIdPregunta(), idUniversidad);
+            if (avgDB != null) { // Cuando todas las preguntas tienen calificacion 0 devuelve null pero en eralidad seria avg 0
+                promedioPreguntas.put("promedio " + i++, avgDB);
+            } else {
+                promedioPreguntas.put("promedio " + i++, 0d);
             }
         }
         return promedioPreguntas;
