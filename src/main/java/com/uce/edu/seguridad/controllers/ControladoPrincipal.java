@@ -14,7 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST})
 @RequestMapping("/seguridad")
 public class ControladoPrincipal {
 
@@ -29,7 +29,7 @@ public class ControladoPrincipal {
 
     @Autowired
     private CoworkerService coworkerService;
-    
+
     @Autowired
     private UniversidadService universidadService;
 
