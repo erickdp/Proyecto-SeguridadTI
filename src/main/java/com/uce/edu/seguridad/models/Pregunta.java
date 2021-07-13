@@ -17,6 +17,7 @@ public class Pregunta implements Serializable {
     @Column(name = "id_pregunta")
     private Long idPregunta;
 
+    @Column(name = "pregunta", length = 400)
     private String pregunta;
 
     @ManyToOne(cascade = CascadeType.MERGE, optional = false)
