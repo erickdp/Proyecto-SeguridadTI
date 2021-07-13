@@ -9,7 +9,7 @@ import java.util.List;
 public class Utileria {
 
     public static List<Usuario> filtrarUsuario(List<Coworker> coworkers) {
-        var usuarios = new ArrayList<Usuario>();
+        List usuarios = new ArrayList<Usuario>();
         coworkers.forEach(c -> usuarios.add(c.getUsuario()));
         return usuarios;
     }
