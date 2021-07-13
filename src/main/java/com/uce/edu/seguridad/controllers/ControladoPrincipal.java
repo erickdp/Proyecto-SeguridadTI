@@ -29,10 +29,7 @@ public class ControladoPrincipal {
 
     @Autowired
     private CoworkerService coworkerService;
-
-    @Autowired
-    private ProvinciaService provinciaService;
-
+    
     @Autowired
     private UniversidadService universidadService;
 
