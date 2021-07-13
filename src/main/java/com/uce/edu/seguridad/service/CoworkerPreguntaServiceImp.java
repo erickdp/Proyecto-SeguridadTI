@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -43,11 +42,11 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService {
     // Se necesita mayor cohesion y bajo acoplamiento en estos metodos de servicio
     @Override
     public LinkedHashMap<String, String> promedioPorPreguntaDeFormulario(List<Pregunta> preguntasFiltradas, Long idUniversidad) {
-        var promedioPreguntas = new LinkedHashMap<String, String>();
+        LinkedHashMap promedioPreguntas = new LinkedHashMap<String, String>();
         int i = 1;
         for (Pregunta p :
                 preguntasFiltradas) {
-            var avgDB = this.coworkerPreguntaRepository.getAVGByPreguntaId(p.getIdPregunta(), idUniversidad);
+            Double avgDB = this.coworkerPreguntaRepository.getAVGByPreguntaId(p.getIdPregunta(), idUniversidad);
             if (avgDB != null) { // Cuando todas las preguntas tienen calificacion 0 devuelve null pero en eralidad seria avg 0
                 promedioPreguntas.put("pregunta " + i, p.getPregunta());
                 promedioPreguntas.put("promedio " + i++, String.valueOf(avgDB));
@@ -61,11 +60,11 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService {
 
     @Override
     public LinkedHashMap<String, Double> soloPromedioPorPreguntaDeFormulario(List<Pregunta> preguntasFiltradas, Long idUniversidad) {
-        var promedioPreguntas = new LinkedHashMap<String, Double>();
+        LinkedHashMap promedioPreguntas = new LinkedHashMap<String, Double>();
         int i = 1;
         for (Pregunta p :
                 preguntasFiltradas) {
-            var avgDB = this.coworkerPreguntaRepository.getAVGByPreguntaId(p.getIdPregunta(), idUniversidad);
+            Double avgDB = this.coworkerPreguntaRepository.getAVGByPreguntaId(p.getIdPregunta(), idUniversidad);
             if (avgDB != null) { // Cuando todas las preguntas tienen calificacion 0 devuelve null pero en eralidad seria avg 0
                 promedioPreguntas.put("promedio " + i++, avgDB);
             } else {
@@ -77,17 +76,17 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService {
 
     @Override
     public HashMap<String, HashMap<String, Double>> promedioYPreguntaDeFormulario(List<Pregunta> preguntasFiltradas, Long idUniversidad) {
-        var preguntas = new HashMap<String, HashMap<String, Double>>();
+        HashMap preguntas = new HashMap<String, HashMap<String, Double>>();
         int i = 1;
         for (Pregunta p :
                 preguntasFiltradas) {
-            var avgDB = this.coworkerPreguntaRepository.getAVGByPreguntaId(p.getIdPregunta(), idUniversidad);
+            Double avgDB = this.coworkerPreguntaRepository.getAVGByPreguntaId(p.getIdPregunta(), idUniversidad);
             if (avgDB != null) { // Cuando todas las preguntas tienen calificacion 0 devuelve null pero en eralidad seria avg 0
-                var promedio = new HashMap<String, Double>();
+                HashMap promedio = new HashMap<String, Double>();
                 promedio.put("promedio", avgDB);
                 preguntas.put(p.getPregunta(), promedio);
             } else {
-                var promedio = new HashMap<String, Double>();
+                HashMap promedio = new HashMap<String, Double>();
                 promedio.put("promedio", 0d);
                 preguntas.put(p.getPregunta(), promedio);
             }
@@ -98,10 +97,10 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService {
     // Se necesita mayor cohesion y bajo acoplamiento en estos metodos de servicio
     @Override
     public HashMap<String, Long> obtenerParticipantesPorPregunta(List<Pregunta> preguntasFiltradas, Long idUniversdida) {
-        var participantes = new HashMap<String, Long>();
+        HashMap participantes = new HashMap<String, Long>();
         for (Pregunta p :
                 preguntasFiltradas) {
-            var totalParticipantes = this.coworkerPreguntaRepository.getCoworkerPerQuestion(p.getIdPregunta(), idUniversdida);
+            Long totalParticipantes = this.coworkerPreguntaRepository.getCoworkerPerQuestion(p.getIdPregunta(), idUniversdida);
             if (totalParticipantes != null) { // Cuando todas las preguntas tienen calificacion 0 devuelve null pero en eralidad seria avg 0
                 participantes.put(p.getPregunta(), totalParticipantes);
             } else {

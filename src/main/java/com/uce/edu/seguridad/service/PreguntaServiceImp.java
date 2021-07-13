@@ -40,7 +40,7 @@ public class PreguntaServiceImp implements PreguntaService {
 
     @Override
     public Pregunta agregarPreguntaAFormulario(String pregunta, Formulario formulario) {
-        var preguntaAgregar = new Pregunta();
+        Pregunta preguntaAgregar = new Pregunta();
         preguntaAgregar.setPregunta(pregunta);
         preguntaAgregar.setFormulario(formulario);
         this.preguntaRepositry.save(preguntaAgregar);

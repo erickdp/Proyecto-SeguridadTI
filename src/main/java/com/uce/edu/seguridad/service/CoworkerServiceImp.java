@@ -51,7 +51,7 @@ public class CoworkerServiceImp implements CoworkerService {
 
     @Override
     public Coworker calificarPregunta(Coworker coworker, Pregunta pregunta, Integer calificacion) {
-        var coworkerPregunta = new CoworkerPregunta();
+        CoworkerPregunta coworkerPregunta = new CoworkerPregunta();
         coworkerPregunta.setPregunta(pregunta);
         coworkerPregunta.setCalificacion(calificacion);
         coworker.getPreguntas().add(coworkerPregunta);
@@ -61,7 +61,7 @@ public class CoworkerServiceImp implements CoworkerService {
 
     @Override
     public void agreagarNuevaPregunta(Pregunta pregunta) {
-        var coworkers = this.listarEntidad();
+        List<Coworker> coworkers = this.listarEntidad();
         Coworker coworker;
         CoworkerPregunta coworkerPregunta;
         for (Coworker value : coworkers) {
@@ -77,10 +77,10 @@ public class CoworkerServiceImp implements CoworkerService {
     // Se necesita mayor cohesion y bajo acoplamiento en estos metodos de servicio
     @Override
     public Coworker setearPreguntas(Coworker coworker, List<Pregunta> preguntaList) {
-        var listaPreguntas = new ArrayList<CoworkerPregunta>();
-        var coworkerA = coworker;
+        List listaPreguntas = new ArrayList<CoworkerPregunta>();
+        Coworker coworkerA = coworker;
         preguntaList.forEach(pregunta -> {
-            var coworkerPregunta = new CoworkerPregunta();
+            CoworkerPregunta coworkerPregunta = new CoworkerPregunta();
             coworkerPregunta.setPregunta(pregunta);
             coworkerPregunta.setCalificacion(0);
             listaPreguntas.add(coworkerPregunta);
@@ -100,13 +100,13 @@ public class CoworkerServiceImp implements CoworkerService {
     public Coworker actualizarCalificacion(
             Long idCoworker,
             List<CoworkerPregunta> preguntas) {
-        var coworker = this.buscarCowokerPorId(idCoworker);
-        var listaAntigua = coworker.getPreguntas();
+        Coworker coworker = this.buscarCowokerPorId(idCoworker);
+        List<CoworkerPregunta> listaAntigua = coworker.getPreguntas();
 
         for (CoworkerPregunta pN : preguntas) {
-            var preCalificadaNueva = pN;
+            CoworkerPregunta preCalificadaNueva = pN;
             if (listaAntigua.contains(preCalificadaNueva)) {
-                var p = listaAntigua.get(listaAntigua.indexOf(preCalificadaNueva));
+                CoworkerPregunta p = listaAntigua.get(listaAntigua.indexOf(preCalificadaNueva));
                 p.setCalificacion(preCalificadaNueva.getCalificacion());
             }
         }

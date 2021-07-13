@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -43,7 +45,7 @@ public class ControladoPrincipal {
     public Usuario iniciarSession(
             @PathVariable(name = "usuario") String usuario,
             @PathVariable(name = "password") String password) {
-        var usuarioRepo = this.usuarioService.buscarPorUsuarioYContrasena(usuario, password);
+        Usuario usuarioRepo = this.usuarioService.buscarPorUsuarioYContrasena(usuario, password);
         return usuarioRepo;
     }
 
@@ -61,8 +63,8 @@ public class ControladoPrincipal {
     public Pregunta agregarPregunta(
             @PathVariable(name = "idformulario") Long idformulario,
             @PathVariable(name = "pregunta") String pregunta) {
-        var formularioA = this.formularioService.consultarPorId(idformulario);
-        var preguntaA = this.preguntaService.agregarPreguntaAFormulario(pregunta, formularioA);
+        Formulario formularioA = this.formularioService.consultarPorId(idformulario);
+        Pregunta preguntaA = this.preguntaService.agregarPreguntaAFormulario(pregunta, formularioA);
         this.coworkerService.agreagarNuevaPregunta(preguntaA); // Aqui se agrega la neuva pregunta al usuario con calificacion de 0
         return preguntaA;
     }
@@ -150,8 +152,8 @@ public class ControladoPrincipal {
             @RequestBody String listaPreguntas,
             @PathVariable String nombreUsuario
     ) {
-        var coworker = this.coworkerService.buscarCoworkerPorNombreUsuario(nombreUsuario);
-        var gson = new Gson();
+        Coworker coworker = this.coworkerService.buscarCoworkerPorNombreUsuario(nombreUsuario);
+        Gson gson = new Gson();
         Type type = new TypeToken<List<CoworkerPregunta>>() {
         }.getType();
         List<CoworkerPregunta> preguntasJson = gson.fromJson(listaPreguntas, type);
@@ -182,7 +184,7 @@ public class ControladoPrincipal {
     public List<Coworker> scorePorUniversidad(
             @PathVariable(name = "nombreUniversidad") String universidad
     ) {
-        var universidadO = this.universidadService.buscarUnieversidadPorNombre(universidad);
+        Universidad universidadO = this.universidadService.buscarUnieversidadPorNombre(universidad);
         return this.coworkerService.buscarPorUnivesidad(universidadO.getIdUniversidad());
     }
 
@@ -191,19 +193,19 @@ public class ControladoPrincipal {
     public List<CoworkerPregunta> preguntasCoworker(
             @PathVariable(name = "nombreUsuario") String usuario
     ) {
-        var coworker = this.coworkerService.buscarCoworkerPorNombreUsuario(usuario);
+        Coworker coworker = this.coworkerService.buscarCoworkerPorNombreUsuario(usuario);
         return this.coworkerService.buscarCowokerPorId(coworker.getIdCoworker()).getPreguntas();
     }
 
     //    NO TOMAR EN CUENTA
 //    Este metodo sera usado luego cuando solo se desee enviar JSON desde java
-    @GetMapping("/obtenerJson")
-    public HashMap<String, Integer> obtenerJson() {
-        var mapa = new HashMap<String, Integer>();
-        mapa.put("edad", 22);
-        mapa.put("altura", 165);
-        return mapa;
-    }
+//    @GetMapping("/obtenerJson")
+//    public HashMap<String, Integer> obtenerJson() {
+//        Map mapa = new HashMap<String, Integer>();
+//        mapa.put("edad", 22);
+//        mapa.put("altura", 165);
+//        return mapa;
+//    }
 
     //    Metodo que permite obtener el promedio de cada pregunta realizada por todos los participates de un determinado formulario
 //    y para una determinada universidad PROBAR MAS
@@ -212,9 +214,9 @@ public class ControladoPrincipal {
             @PathVariable(value = "tipoFormulario") String formulario,
             @PathVariable(value = "nombreUniversidad") String nombre
     ) {
-        var universidad = this.universidadService.buscarUnieversidadPorNombre(nombre);
-        var formularioO = this.formularioService.buscarPorNombreFormulario(formulario);
-        var preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(formularioO.getIdFormulario());
+        Universidad universidad = this.universidadService.buscarUnieversidadPorNombre(nombre);
+        Formulario formularioO = this.formularioService.buscarPorNombreFormulario(formulario);
+        List<Pregunta> preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(formularioO.getIdFormulario());
         return this.coworkerPreguntaService.promedioPorPreguntaDeFormulario(preguntasFiltradas, universidad.getIdUniversidad());
     }
 
@@ -223,9 +225,9 @@ public class ControladoPrincipal {
             @PathVariable(value = "tipoFormulario") String formulario,
             @PathVariable(value = "nombreUniversidad") String nombre
     ) {
-        var universidad = this.universidadService.buscarUnieversidadPorNombre(nombre);
-        var formularioO = this.formularioService.buscarPorNombreFormulario(formulario);
-        var preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(formularioO.getIdFormulario());
+        Universidad universidad = this.universidadService.buscarUnieversidadPorNombre(nombre);
+        Formulario formularioO = this.formularioService.buscarPorNombreFormulario(formulario);
+        List<Pregunta> preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(formularioO.getIdFormulario());
         return this.coworkerPreguntaService.soloPromedioPorPreguntaDeFormulario(preguntasFiltradas, universidad.getIdUniversidad());
     }
 
@@ -234,9 +236,9 @@ public class ControladoPrincipal {
             @PathVariable(value = "tipoFormulario") String formulario,
             @PathVariable(value = "nombreUniversidad") String nombre
     ) {
-        var universidad = this.universidadService.buscarUnieversidadPorNombre(nombre);
-        var formularioO = this.formularioService.buscarPorNombreFormulario(formulario);
-        var preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(formularioO.getIdFormulario());
+        Universidad universidad = this.universidadService.buscarUnieversidadPorNombre(nombre);
+        Formulario formularioO = this.formularioService.buscarPorNombreFormulario(formulario);
+        List<Pregunta> preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(formularioO.getIdFormulario());
         return this.coworkerPreguntaService.promedioYPreguntaDeFormulario(preguntasFiltradas, universidad.getIdUniversidad());
     }
 
@@ -246,19 +248,19 @@ public class ControladoPrincipal {
             @PathVariable(value = "tipoFormulario") String formulario,
             @PathVariable(value = "nombreUniversidad") String nombre
     ) {
-        var universidad = this.universidadService.buscarUnieversidadPorNombre(nombre);
-        var formularioO = this.formularioService.buscarPorNombreFormulario(formulario);
-        var preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(formularioO.getIdFormulario());
+        Universidad universidad = this.universidadService.buscarUnieversidadPorNombre(nombre);
+        Formulario formularioO = this.formularioService.buscarPorNombreFormulario(formulario);
+        List<Pregunta> preguntasFiltradas = this.preguntaService.obtenerPreguntasPorFormulario(formularioO.getIdFormulario());
         return this.coworkerPreguntaService.obtenerParticipantesPorPregunta(preguntasFiltradas, universidad.getIdUniversidad());
     }
 
     // Metodo que permite obtener a los participantes en funcion de su universidad
     @GetMapping("/obtenerCoworkersPorUniversidad")
     public HashMap<String, List<Usuario>> obtenerCoworkersPorUniversidad() {
-        var nuevoMapa = new HashMap<String, List<Usuario>>();
-        var universidades = this.universidadService.listarEntidad();
+        HashMap nuevoMapa = new HashMap<String, List<Usuario>>();
+        List<Universidad> universidades = this.universidadService.listarEntidad();
         universidades.forEach(u -> {
-            var coworkers = this.coworkerService.buscarPorUnivesidad(u.getIdUniversidad());
+            List<Coworker> coworkers = this.coworkerService.buscarPorUnivesidad(u.getIdUniversidad());
             nuevoMapa.put(u.getNombreUniversidad(), Utileria.filtrarUsuario(coworkers));
         });
         return nuevoMapa;
