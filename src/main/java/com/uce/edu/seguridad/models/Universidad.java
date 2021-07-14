@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class Universidad implements Serializable {
     @Column(name = "id_universidad")
     private Long idUniversidad;
 
-    @Column(name = "nombre_universidad")
+    @Column(name = "nombre_universidad", unique = true)
+    @NotEmpty(message = "Se requiere el nombre de la Universidad")
     private String nombreUniversidad;
 }

@@ -5,15 +5,13 @@ import com.uce.edu.seguridad.models.CoworkerPregunta;
 import com.uce.edu.seguridad.models.Pregunta;
 import com.uce.edu.seguridad.models.Usuario;
 import com.uce.edu.seguridad.repository.CoworkerRepository;
+import com.uce.edu.seguridad.util.Utileria;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -80,6 +78,11 @@ public class CoworkerServiceImp implements CoworkerService {
     // Se necesita mayor cohesion y bajo acoplamiento en estos metodos de servicio
     @Override
     public Coworker setearPreguntas(Coworker coworker, List<Pregunta> preguntaList) {
+        Coworker nombreURepetido = this.coworkerRepository.findByNombreUsuario(coworker.getUsuario().getNombreUsuario());
+        if(nombreURepetido != null) {
+            Usuario nuevoNombre = Utileria.agregarNumero(nombreURepetido.getUsuario());
+            nombreURepetido.setUsuario(nuevoNombre);
+        }
         List listaPreguntas = new ArrayList<CoworkerPregunta>();
         Coworker coworkerA = coworker;
         preguntaList.forEach(pregunta -> {

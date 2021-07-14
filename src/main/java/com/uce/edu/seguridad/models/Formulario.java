@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Data
@@ -20,6 +22,8 @@ public class Formulario implements Serializable {
     private Long idFormulario;
 
     @Column(name = "tipo_formulario")
+    @NotEmpty
+    @Size(max = 100, message = "El nombre del formulario es demasiado largo")
     private String tipoFormulario;
 
 }

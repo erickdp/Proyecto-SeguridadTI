@@ -2,13 +2,12 @@ package com.uce.edu.seguridad.models;
 
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Data
 @Entity
@@ -24,6 +23,7 @@ public class CoworkerPregunta implements Serializable {
     @Column(name = "id_coworker_pregunta")
     private Long idCoworkerPregunta;
 
+    @NotNull
     private Integer calificacion;
 
     @ManyToOne(cascade = CascadeType.MERGE, optional = false)

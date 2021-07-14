@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 @Data
@@ -20,5 +21,6 @@ public class Rol implements Serializable {
     private Long idRol;
 
     @Column(name = "tipo_rol")
+    @NotEmpty
     private String tipoRol;
 }

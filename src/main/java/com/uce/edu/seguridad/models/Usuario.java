@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Data
@@ -20,13 +22,17 @@ public class Usuario implements Serializable {
     @Column(name = "id_usuario")
     private Long idUsuario;
 
-    @Column(name = "nombre_usuario")
+    @Column(name = "nombre_usuario", unique = true)
     private String nombreUsuario;
 
     private String password;
 
+    @NotEmpty
+    @Size(max = 15)
     private String nombres;
 
+    @NotEmpty
+    @Size(max = 15)
     private String apellidos;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)

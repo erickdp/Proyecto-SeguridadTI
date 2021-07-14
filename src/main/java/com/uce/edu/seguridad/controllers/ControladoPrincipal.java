@@ -6,6 +6,8 @@ import com.uce.edu.seguridad.models.*;
 import com.uce.edu.seguridad.service.*;
 import com.uce.edu.seguridad.util.Utileria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Type;
@@ -14,7 +16,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
+@CrossOrigin(origins =
+        {"http://localhost:8080",
+                "https://pgweb-demo.herokuapp.com",
+                "https://localhost:8080"},
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
 @RequestMapping("/seguridad")
 public class ControladoPrincipal {
 
@@ -104,8 +110,6 @@ public class ControladoPrincipal {
     {
     "mailInstitucional": "pedrop@uce.com",
     "usuario": {
-        "nombreUsuario": "pedrop",
-        "password": "123",
         "nombres": "Pedro",
         "apellidos": "Pascal",
         "rol": {
@@ -118,8 +122,14 @@ public class ControladoPrincipal {
     } OK
     * */
     @PostMapping("/crearCoworker")
-    public Coworker crearCoworker(@RequestBody Coworker nuevoCoworker) {
-        return this.coworkerService.setearPreguntas(nuevoCoworker, this.preguntaService.listarEntidad());
+    public ResponseEntity<?> crearCoworker(@RequestBody Coworker nuevoCoworker) {
+        Coworker nuevoCoworkerS = nuevoCoworker;
+        String nombreUsuarioA = Utileria.generarUsuario(nuevoCoworkerS.getUsuario());
+        String contrasenaA = Utileria.generarContrasena();
+        nuevoCoworkerS.getUsuario().setNombreUsuario(nombreUsuarioA);
+        nuevoCoworkerS.getUsuario().setPassword(contrasenaA);
+        Coworker coworkerS = this.coworkerService.setearPreguntas(nuevoCoworkerS, this.preguntaService.listarEntidad());
+        return new ResponseEntity<Coworker>(coworkerS, HttpStatus.OK); // Codigo 200 o sea OK
     }
 
     /*
@@ -252,15 +262,11 @@ public class ControladoPrincipal {
     }
 
     // Metodo que permite obtener a los participantes en funcion de su universidad
-    @GetMapping("/obtenerCoworkersPorUniversidad")
-    public HashMap<String, List<Usuario>> obtenerCoworkersPorUniversidad() {
-        HashMap nuevoMapa = new HashMap<String, List<Usuario>>();
-        List<Universidad> universidades = this.universidadService.listarEntidad();
-        universidades.forEach(u -> {
-            List<Coworker> coworkers = this.coworkerService.buscarPorUnivesidad(u.getIdUniversidad());
-            nuevoMapa.put(u.getNombreUniversidad(), Utileria.filtrarUsuario(coworkers));
-        });
-        return nuevoMapa;
+    @GetMapping("/obtenerUsuarioPorUniversidad/{nombreUniversidad}")
+    public List<Usuario> obtenerCoworkersPorUniversidad(@PathVariable String nombreUniversidad) {
+        Universidad universidadad = this.universidadService.buscarUnieversidadPorNombre(nombreUniversidad);
+        List<Coworker> coworkers = this.coworkerService.buscarPorUnivesidad(universidadad.getIdUniversidad());
+        return Utileria.filtrarUsuario(coworkers);
     }
 
     //    Metodo para agregar una nueva universidad, en el caso de que no esten todas

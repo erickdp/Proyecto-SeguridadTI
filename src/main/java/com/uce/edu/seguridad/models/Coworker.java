@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -20,15 +22,13 @@ public class Coworker implements Serializable {
     @Column(name = "id_coworker")
     private Long idCoworker;
 
-    @Column(name = "mail")
-    private String mailInstitucional;
-
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     @JoinColumn(name = "id_coworker")
     private List<CoworkerPregunta> preguntas;
 
     @ManyToOne(cascade = CascadeType.MERGE, optional = false)
     @JoinColumn(name = "id_universidad")
+    @NotNull
     private Universidad universidad;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
