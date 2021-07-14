@@ -16,11 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins =
-        {"http://localhost:8080",
-                "https://sgcn-app.herokuapp.com",
-                "https://localhost:8080"},
-        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
 @RequestMapping("/seguridad")
 public class ControladoPrincipal {
 
