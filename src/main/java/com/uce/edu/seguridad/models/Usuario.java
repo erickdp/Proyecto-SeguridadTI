@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @NoArgsConstructor
-@Table(name = "usuario")
+@Table(name = "usuario") // En postgresql no se puede usar el nombre de user para la clase
 public class Usuario implements Serializable {
 
     private static final Long serialVersionUID = 1L;
