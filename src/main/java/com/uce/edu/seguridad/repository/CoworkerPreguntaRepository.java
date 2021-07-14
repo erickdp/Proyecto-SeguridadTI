@@ -7,12 +7,12 @@ import org.springframework.data.repository.query.Param;
 
 public interface CoworkerPreguntaRepository extends JpaRepository<CoworkerPregunta, Long> {
 
-    @Query(value = "call promedio_preguntas(:preguntaI, :universidadI);", nativeQuery = true)
+    @Query(value = "SELECT promedio_preguntas(:preguntaI, :universidadI);", nativeQuery = true)
     Double getAVGByPreguntaId(
             @Param("preguntaI") Long IdPregunta,
             @Param("universidadI") Long idUniversidad);
 
-    @Query(value = "call numero_participantes(:preguntaI, :universidadI);", nativeQuery = true)
+    @Query(value = "SELECT numero_participantes(:preguntaI, :universidadI);", nativeQuery = true)
     Long getCoworkerPerQuestion(@Param("preguntaI") Long IdPregunta,
                                 @Param("universidadI") Long idUniversidad);
 }
