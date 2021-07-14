@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins =
         {"http://localhost:8080",
-                "https://pgweb-demo.herokuapp.com",
+                "https://sgcn-app.herokuapp.com/",
                 "https://localhost:8080"},
         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
 @RequestMapping("/seguridad")
