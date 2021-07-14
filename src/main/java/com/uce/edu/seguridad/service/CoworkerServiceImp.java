@@ -134,7 +134,7 @@ public class CoworkerServiceImp implements CoworkerService {
 
     @Override
     @Transactional(readOnly = true)
-    public String obtenerUniversidad(Long id) {
+    public Coworker obtenerUniversidad(Long id) {
         return this.coworkerRepository.searchUniversidad(id);
     }
 }

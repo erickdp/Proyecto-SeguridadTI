@@ -263,7 +263,7 @@ public class ControladoPrincipal {
         return nuevoMapa;
     }
 
-//    Metodo para agregar una nueva universidad, en el caso de que no esten todas
+    //    Metodo para agregar una nueva universidad, en el caso de que no esten todas
     @GetMapping("/agregarUniversidad/{nombreUniversidad}")
     public Universidad guardarUniversidad(@PathVariable String nombreUniversidad) {
         Universidad u = new Universidad();
@@ -282,10 +282,12 @@ public class ControladoPrincipal {
     }
 
     @GetMapping("/obtenerUCoworker/{nombreUsuario}")
-    public HashMap<String, String> obtenerUsuario(@PathVariable String nombreUsuario) {
-        HashMap<String, String> mapa = new HashMap<>();
+    public LinkedHashMap<String, String> obtenerUsuario(@PathVariable String nombreUsuario) {
+        LinkedHashMap<String, String> mapa = new LinkedHashMap<>();
         Usuario u = this.usuarioService.buscarPorNombreUsuario(nombreUsuario);
-        mapa.put("Universidad", this.coworkerService.obtenerUniversidad(u.getIdUsuario()));
+        Coworker c = this.coworkerService.obtenerUniversidad(u.getIdUsuario());
+        mapa.put("universidad", c.getUniversidad().getNombreUniversidad());
+        mapa.put("idUniversidad", String.valueOf(c.getUniversidad().getIdUniversidad()));
         return mapa;
     }
 }
