@@ -262,4 +262,12 @@ public class ControladoPrincipal {
         });
         return nuevoMapa;
     }
+
+//    Metodo para agregar una nueva universidad, en el caso de que no esten todas
+    @GetMapping("/agregarUniversidad/{nombreUniversidad}")
+    public Universidad guardarUniversidad(@PathVariable String nombreUniversidad) {
+        Universidad u = new Universidad();
+        u.setNombreUniversidad(nombreUniversidad);
+        return this.universidadService.guardar(u);
+    }
 }
