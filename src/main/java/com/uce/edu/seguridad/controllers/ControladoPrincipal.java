@@ -270,4 +270,14 @@ public class ControladoPrincipal {
         u.setNombreUniversidad(nombreUniversidad);
         return this.universidadService.guardar(u);
     }
+
+    @DeleteMapping("/resetearTodo")
+    public HashMap<String, String> resetearTodo() {
+        this.coworkerPreguntaService.elimianarEntidad();
+        this.coworkerService.eliminarEntidad();
+        this.usuarioService.eliminarEntidad();
+        HashMap<String, String> res = new HashMap<>();
+        res.put("mensaje", "limpiado");
+        return res;
+    }
 }

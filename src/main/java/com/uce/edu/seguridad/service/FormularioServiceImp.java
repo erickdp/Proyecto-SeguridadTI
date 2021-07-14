@@ -26,11 +26,13 @@ public class FormularioServiceImp implements FormularioService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Formulario> listarEntidad() {
         return null;
     }
 
     @Override
+    @Transactional
     public Formulario actualizarEntidad(Formulario entidad) {
         return null;
     }

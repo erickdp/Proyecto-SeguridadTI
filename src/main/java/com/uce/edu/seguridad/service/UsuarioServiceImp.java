@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UsuarioServiceImp implements UsuarioService {
@@ -15,6 +17,7 @@ public class UsuarioServiceImp implements UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Override
+    @Transactional
     public Usuario guardar(Usuario entidad) {
         return this.usuarioRepository.save(entidad);
     }
@@ -26,8 +29,9 @@ public class UsuarioServiceImp implements UsuarioService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Usuario> listarEntidad() {
-        return null;
+        return this.usuarioRepository.findAll();
     }
 
     @Override
@@ -36,7 +40,21 @@ public class UsuarioServiceImp implements UsuarioService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Usuario buscarPorUsuarioYContrasena(String usuario, String contrasena) {
         return this.usuarioRepository.findByNombreUsuarioAndPassword(usuario, contrasena);
+    }
+
+    @Override
+    @Transactional
+    public void eliminarEntidad() {
+        List<Usuario> usuarios = this.listarEntidad();
+        Set<Long> ids = new HashSet<>();
+        usuarios.forEach(u -> {
+            if(!(u.getRol().getIdRol().equals(1L))) {
+                ids.add(u.getIdUsuario());
+            }
+        });
+        this.usuarioRepository.deleteAllByIds(ids);
     }
 }

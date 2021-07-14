@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService {
@@ -23,6 +21,7 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService {
         return this.coworkerPreguntaRepository.save(entidad);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public CoworkerPregunta consultarPorId(Long id) {
         return this.coworkerPreguntaRepository.findById(id).orElse(null);
@@ -34,9 +33,19 @@ public class CoworkerPreguntaServiceImp implements CoworkerPreguntaService {
         return this.coworkerPreguntaRepository.findAll();
     }
 
+    @Transactional
     @Override
     public CoworkerPregunta actualizarEntidad(CoworkerPregunta entidad) {
         return null;
+    }
+
+    @Transactional
+    @Override
+    public void elimianarEntidad() {
+        List<CoworkerPregunta> cp = this.listarEntidad();
+        List<Long> ids = new ArrayList<>();
+        cp.forEach(c -> ids.add(c.getIdCoworkerPregunta()));
+        this.coworkerPreguntaRepository.deleteCoworkerPreguntaByIds(ids);
     }
 
     // Se necesita mayor cohesion y bajo acoplamiento en estos metodos de servicio

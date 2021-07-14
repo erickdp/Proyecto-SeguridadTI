@@ -3,6 +3,7 @@ package com.uce.edu.seguridad.service;
 import com.uce.edu.seguridad.models.Coworker;
 import com.uce.edu.seguridad.models.CoworkerPregunta;
 import com.uce.edu.seguridad.models.Pregunta;
+import com.uce.edu.seguridad.models.Usuario;
 import com.uce.edu.seguridad.repository.CoworkerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -114,8 +117,18 @@ public class CoworkerServiceImp implements CoworkerService {
         return this.actualizarEntidad(coworker);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Coworker buscarCoworkerPorNombreUsuario(String nombreUsuario) {
         return this.coworkerRepository.findByNombreUsuario(nombreUsuario);
+    }
+
+    @Override
+    @Transactional
+    public void eliminarEntidad() {
+        List<Coworker> usuarios = this.listarEntidad();
+        Set<Long> ids = new HashSet<>();
+        usuarios.forEach(u -> ids.add(u.getIdCoworker()));
+        this.coworkerRepository.deleteAllByIds(ids);
     }
 }

@@ -39,6 +39,7 @@ public class UniversidadServiceImp implements UniversidadService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Universidad buscarUnieversidadPorNombre(String nombre) {
         return this.universidadRepository.findByNombreUniversidad(nombre);
     }

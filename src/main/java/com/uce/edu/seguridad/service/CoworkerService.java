@@ -20,4 +20,6 @@ public interface CoworkerService extends BaseService<Coworker> {
     Coworker actualizarCalificacion(Long idCoworker, List<CoworkerPregunta> preguntas);
 
     Coworker buscarCoworkerPorNombreUsuario(String nombreUsuario);
+
+    void eliminarEntidad();
 }

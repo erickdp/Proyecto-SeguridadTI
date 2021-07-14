@@ -15,4 +15,6 @@ public interface CoworkerPreguntaService extends BaseService<CoworkerPregunta> {
     HashMap<String, Long> obtenerParticipantesPorPregunta(List<Pregunta> preguntasFiltradas, Long idUniversdida);
 
     HashMap<String, HashMap<String, Double>> promedioYPreguntaDeFormulario(List<Pregunta> preguntasFiltradas, Long idUniversdida);
+
+    void elimianarEntidad();
 }
