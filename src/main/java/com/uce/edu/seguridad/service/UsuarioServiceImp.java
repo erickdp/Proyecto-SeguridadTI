@@ -57,4 +57,10 @@ public class UsuarioServiceImp implements UsuarioService {
         });
         this.usuarioRepository.deleteAllByIds(ids);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Usuario buscarPorNombreUsuario(String nombreUsuario) {
+        return this.usuarioRepository.findByNombreUsuario(nombreUsuario);
+    }
 }

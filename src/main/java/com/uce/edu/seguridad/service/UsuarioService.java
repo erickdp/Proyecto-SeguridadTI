@@ -6,4 +6,6 @@ public interface UsuarioService extends BaseService<Usuario> {
     public Usuario buscarPorUsuarioYContrasena(String usuario, String contrasena);
 
     void eliminarEntidad();
+
+    Usuario buscarPorNombreUsuario(String nombreUsuario);
 }

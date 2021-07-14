@@ -280,4 +280,9 @@ public class ControladoPrincipal {
         res.put("mensaje", "limpiado");
         return res;
     }
+
+    @GetMapping("/obtenerUsuario/{nombreUsuario}")
+    public Usuario obtenerUsuario(@PathVariable String nombreUsuario) {
+        return this.usuarioService.buscarPorNombreUsuario(nombreUsuario);
+    }
 }

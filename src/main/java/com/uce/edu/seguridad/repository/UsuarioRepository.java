@@ -13,4 +13,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     @Modifying
     @Query("DELETE FROM Usuario u WHERE u.idUsuario IN ?1")
     void deleteAllByIds(Set<Long> ids);
+
+    Usuario findByNombreUsuario(String nombreUsuario);
 }
