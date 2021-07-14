@@ -131,4 +131,10 @@ public class CoworkerServiceImp implements CoworkerService {
         usuarios.forEach(u -> ids.add(u.getIdCoworker()));
         this.coworkerRepository.deleteAllByIds(ids);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public String obtenerUniversidad(Long id) {
+        return this.coworkerRepository.searchUniversidad(id);
+    }
 }

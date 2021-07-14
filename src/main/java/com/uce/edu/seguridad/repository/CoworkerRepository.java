@@ -19,4 +19,7 @@ public interface CoworkerRepository extends JpaRepository<Coworker, Long> {
     @Modifying
     @Query("DELETE FROM Coworker c WHERE c.idCoworker IN ?1")
     void deleteAllByIds(Set<Long> ids);
+
+    @Query("SELECT c.universidad.nombreUniversidad FROM Coworker c WHERE c.usuario.idUsuario = ?1")
+    String searchUniversidad(Long id);
 }

@@ -281,8 +281,11 @@ public class ControladoPrincipal {
         return res;
     }
 
-    @GetMapping("/obtenerUsuario/{nombreUsuario}")
-    public Usuario obtenerUsuario(@PathVariable String nombreUsuario) {
-        return this.usuarioService.buscarPorNombreUsuario(nombreUsuario);
+    @GetMapping("/obtenerUCoworker/{nombreUsuario}")
+    public HashMap<String, String> obtenerUsuario(@PathVariable String nombreUsuario) {
+        HashMap<String, String> mapa = new HashMap<>();
+        Usuario u = this.usuarioService.buscarPorNombreUsuario(nombreUsuario);
+        mapa.put("Universidad", this.coworkerService.obtenerUniversidad(u.getIdUsuario()));
+        return mapa;
     }
 }

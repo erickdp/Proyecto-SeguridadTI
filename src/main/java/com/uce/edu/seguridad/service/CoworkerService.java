@@ -22,4 +22,6 @@ public interface CoworkerService extends BaseService<Coworker> {
     Coworker buscarCoworkerPorNombreUsuario(String nombreUsuario);
 
     void eliminarEntidad();
+
+    String obtenerUniversidad(Long id);
 }
